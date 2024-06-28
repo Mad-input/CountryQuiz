@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+:root {
+  --text-color: #8b8eab;
+  --hoverAndActive: linear-gradient(#e65895, #bc6be8);
+  --bg_quiz: #393f6e;
+  --bg_second: #343964;
+  --text_2: #ffecc8;
+  --radius: 30px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+body {
+  background: url("/public/img/bg.jpg") no-repeat top/cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app {
+  .quiz {
+    border-radius: var(--radius);
+    background: var(--bg_second);
+    padding: 40px 100px;
+    .quiz-title {
+      color: var(--text-color);
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .indicators {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-block: 20px;
+      .indicator {
+        align-items: center;
+        --size: 50px;
+        border: none;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 100%;
+        background: var(--bg_quiz);
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease-in-out all;
+        &.active {
+          background: var(--hoverAndActive);
+        }
+        &:hover {
+          background: var(--hoverAndActive);
+        }
+      }
+    }
+
+    .question-container {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      .text-question {
+        color: var(--text-color);
+        font-size: 35px;
+        text-align: center;
+        margin-block: 35px;
+        width: 80%;
+        animation: show 1s ease-in-out;
+      }
+      .options-container {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+        grid-auto-rows: 70px;
+        gap: 20px;
+        width: 100%;
+        .option {
+          padding: 20px 0;
+          border: none;
+          background: var(--bg_quiz);
+          border-radius: calc(var(--radius) / 2);
+          font-size: 18px;
+          font-weight: bold;
+          color: #fff;
+          cursor: pointer;
+          animation: fadeIn 1s ease;
+          &:hover {
+            background: var(--hoverAndActive);
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateX(100px);
+  }
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+}
