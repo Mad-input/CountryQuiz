@@ -41,7 +41,8 @@ body {
       gap: 15px;
       margin-block: 20px;
       .indicator {
-        align-items: center;
+        display: grid;
+        place-items: center;
         --size: 50px;
         border: none;
         width: var(--size);
@@ -53,6 +54,7 @@ body {
         font-weight: bold;
         cursor: pointer;
         transition: 0.3s ease-in-out all;
+        list-style: none;
         &.active {
           background: var(--hoverAndActive);
         }
@@ -66,6 +68,29 @@ body {
       display: flex;
       flex-flow: column wrap;
       align-items: center;
+
+      .loader-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        .loader {
+          --size: 50px;
+          width: var(--size);
+          height: var(--size);
+          border-radius: 100%;
+          border: 3px solid var(--text_2);
+          border-top-color: transparent;
+          border-bottom-color: transparent;
+          animation: rotate 2s ease-in-out alternate-reverse infinite;
+        }
+        span {
+          display: inline-block;
+          color: #fff !important;
+          font-weight: bold;
+        }
+      }
+
       .text-question {
         color: var(--text-color);
         font-size: 35px;
@@ -76,11 +101,14 @@ body {
       }
       .options-container {
         display: grid;
-        grid-template-columns: repeat(2, minmax(200px, 1fr));
-        grid-auto-rows: 70px;
+        grid-template-columns: repeat(2, minmax(200px, 400px));
         gap: 20px;
         width: 100%;
         .option {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 15px;
           padding: 20px 0;
           border: none;
           background: var(--bg_quiz);
@@ -91,6 +119,9 @@ body {
           cursor: pointer;
           animation: fadeIn 1s ease;
           &:hover {
+            background: var(--hoverAndActive);
+          }
+          &.active {
             background: var(--hoverAndActive);
           }
         }
@@ -108,5 +139,14 @@ body {
 @keyframes show {
   from {
     opacity: 0;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

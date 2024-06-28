@@ -2,13 +2,17 @@ import dataCountry from "./data/index.js";
 const containerIndicator = document.querySelector(".indicators");
 const containerQuestion = document.querySelector(".question-container");
 const IndicatorMap = new Map();
+const OptionsMap = new Map();
+const data = await dataCountry.structureQuestions();
+const capitals = await dataCountry.extractCapital();
 let currentCount = 0;
+let isSeledted = false;
 
 const renderIndicators = async () => {
-  const data = await dataCountry.structureQuestions();
+  //   const data = await dataCountry.structureQuestions();
   containerIndicator.innerHTML = "";
   for (let i = 0; i < data.length; i++) {
-    const element = document.createElement("button");
+    const element = document.createElement("li");
     element.className = "indicator";
     element.setAttribute("data-id", i);
     element.innerText = i + 1;
@@ -25,7 +29,7 @@ const renderIndicators = async () => {
  * @param {Number} currentCount
  */
 const renderQuestion = async () => {
-  const data = await dataCountry.structureQuestions();
+  //   const data = await dataCountry.structureQuestions();
   IndicatorMap.get(currentCount).classList.add("active");
   const { question } = data[currentCount];
   const elementTitle = document.createElement("h1");
@@ -38,8 +42,8 @@ const renderQuestion = async () => {
 };
 
 const renderOptions = async () => {
-  const data = await dataCountry.structureQuestions();
-  const capitals = await dataCountry.extractCapital();
+  //   const data = await dataCountry.structureQuestions();
+
   const correctOption = data[currentCount].capital;
   const filteredCapitals = capitals
     .filter((capital) => capital !== correctOption)
@@ -52,26 +56,49 @@ const renderOptions = async () => {
   const optionsCotainer = document.createElement("div");
   optionsCotainer.className = "options-container";
   optionsCotainer.innerHTML = "";
-  finalCapitals.forEach((capital, i) => {
+  finalCapitals.forEach((capital) => {
     const optionElement = document.createElement("button");
-    optionElement.innerText = capital;
+    optionElement.innerHTML = `<span>${capital}</span>`;
     optionElement.className = "option";
     optionsCotainer.appendChild(optionElement);
     optionElement.addEventListener("click", (e) => checkAnswer(e));
+
+    OptionsMap.set(capital, optionElement);
   });
   containerQuestion.append(optionsCotainer);
 };
 
 async function checkAnswer(e) {
-  const data = await dataCountry.structureQuestions();
+  if (isSeledted) return;
+  isSeledted = true;
+  //   const data = await dataCountry.structureQuestions();
+  const { target } = e;
   const correctAnswer = data[currentCount].answer;
-  const userAnswer = e.target.innerText;
-  console.log(userAnswer, correctAnswer);
+  const userAnswer = target.innerText;
+  target.classList.add("active");
   currentCount++;
-  renderQuestion();
-  renderOptions();
+
   if (userAnswer === correctAnswer) {
-  } else console.log("mal");
+    inserIcon(target, "/public/img/Check_round_fill.svg");
+  } else {
+    const element = OptionsMap.get(correctAnswer);
+    inserIcon(target, "/public/img/Close_round_fill.svg");
+    inserIcon(element, "/public/img/Check_round_fill.svg");
+  }
+
+  setTimeout(() => {
+    renderQuestion();
+    renderOptions();
+    isSeledted = false;
+  }, 2000);
+}
+
+function inserIcon(element, url) {
+  const iconCheck = document.createElement("img");
+  iconCheck.src = `${url}`;
+  iconCheck.alt = "icon check";
+  iconCheck.classList.add("icon-option");
+  element.append(iconCheck);
 }
 
 renderIndicators();

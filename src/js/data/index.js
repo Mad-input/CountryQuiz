@@ -1,4 +1,5 @@
 export default class dataCountry {
+  static questionsCache = [];
   static async getAllInfo() {
     try {
       let res;
@@ -7,31 +8,34 @@ export default class dataCountry {
         .then((data) => {
           res = data;
         });
-      return res;
+      this.questionsCache = [];
+      this.questionsCache.push(...res);
     } catch (e) {
       console.error(e);
     }
   }
+
   /**
    *
    * @param {Number} limit limite de de preguntas
-   * @returns {Promise}
+   * @returns {}
    */
   static async structureQuestions(limit = 10) {
+    await this.getAllInfo().then();
     try {
-      const data = await this.getAllInfo();
+      const data = this.questionsCache;
       if (!data) return [];
       // Limitar la cantidad de información
       const splitData = data.slice(0, limit);
 
-      const newData = splitData.map(({ name, capital }, id) => {
+      const newData = splitData.map(({ name, capital, flag }, id) => {
         const newName = name.common;
         const newCapital = capital instanceof Object ? capital[0] : capital;
         return {
           id,
           name: newName,
           capital: newCapital,
-          question: `What is the capital of ${newName}?`,
+          question: `What is the capital of ${newName} ${flag}?`,
           answer: newCapital,
         };
       });
@@ -42,8 +46,9 @@ export default class dataCountry {
   }
 
   static async extractCapital() {
+    await this.getAllInfo().then();
     try {
-      const data = await this.getAllInfo();
+      const data = this.questionsCache;
       const capitals = data.slice(0, 30).map((ques) => ques.capital[0]);
       return capitals;
     } catch (e) {
