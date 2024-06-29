@@ -1,15 +1,19 @@
 import dataCountry from "./data/index.js";
 const containerIndicator = document.querySelector(".indicators");
 const containerQuestion = document.querySelector(".question-container");
+const elementProgess = document.querySelector(".progress");
+const $quiz = document.querySelector(".quiz");
+const soundCorrectAnswer = new Audio("/public/audio/correct-choice.mp3");
+const soundError = new Audio("/public/audio/error.mp3");
+const soundSend = new Audio("/public/audio/shuffleandbridge.mp3");
 const IndicatorMap = new Map();
 const OptionsMap = new Map();
 const data = await dataCountry.structureQuestions();
-const capitals = await dataCountry.extractCapital();
 let currentCount = 0;
+let score = 0;
 let isSeledted = false;
 
 const renderIndicators = async () => {
-  //   const data = await dataCountry.structureQuestions();
   containerIndicator.innerHTML = "";
   for (let i = 0; i < data.length; i++) {
     const element = document.createElement("li");
@@ -29,7 +33,6 @@ const renderIndicators = async () => {
  * @param {Number} currentCount
  */
 const renderQuestion = async () => {
-  //   const data = await dataCountry.structureQuestions();
   IndicatorMap.get(currentCount).classList.add("active");
   const { question } = data[currentCount];
   const elementTitle = document.createElement("h1");
@@ -42,16 +45,7 @@ const renderQuestion = async () => {
 };
 
 const renderOptions = async () => {
-  //   const data = await dataCountry.structureQuestions();
-
-  const correctOption = data[currentCount].capital;
-  const filteredCapitals = capitals
-    .filter((capital) => capital !== correctOption)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3);
-  const finalCapitals = [...filteredCapitals, correctOption].sort(
-    () => Math.random() - 0.5
-  );
+  const finalCapitals = data[currentCount].options;
 
   const optionsCotainer = document.createElement("div");
   optionsCotainer.className = "options-container";
@@ -71,7 +65,6 @@ const renderOptions = async () => {
 async function checkAnswer(e) {
   if (isSeledted) return;
   isSeledted = true;
-  //   const data = await dataCountry.structureQuestions();
   const { target } = e;
   const correctAnswer = data[currentCount].answer;
   const userAnswer = target.innerText;
@@ -79,18 +72,39 @@ async function checkAnswer(e) {
   currentCount++;
 
   if (userAnswer === correctAnswer) {
+    score++;
+    soundCorrectAnswer.play();
     inserIcon(target, "/public/img/Check_round_fill.svg");
   } else {
+    soundError.play();
+    // Seleccionar la opcion correcta para agregarle el icono
     const element = OptionsMap.get(correctAnswer);
     inserIcon(target, "/public/img/Close_round_fill.svg");
     inserIcon(element, "/public/img/Check_round_fill.svg");
   }
 
   setTimeout(() => {
+    if (currentCount >= data.length) return gameOver();
+    soundSend.play();
     renderQuestion();
     renderOptions();
+    moveScrollIndicator();
+    showProgress();
     isSeledted = false;
   }, 2000);
+}
+
+function moveScrollIndicator() {
+  if (window.innerWidth < 772 && containerIndicator) {
+    const { clientHeight } = containerIndicator.querySelector(".indicator");
+    containerIndicator.scrollLeft += clientHeight;
+  }
+}
+
+function showProgress() {
+  if (elementProgess) {
+    elementProgess.innerText = `${currentCount + 1}/${data.length}`;
+  }
 }
 
 function inserIcon(element, url) {
@@ -100,7 +114,28 @@ function inserIcon(element, url) {
   iconCheck.classList.add("icon-option");
   element.append(iconCheck);
 }
+function gameOver() {
+  const CongrastsAudio = new Audio("/public/audio/congrasts.mp3");
+  CongrastsAudio.play();
+  const card = document.createElement("article");
+  const btnAgain = document.createElement("button");
+  card.className = "card";
+  card.innerHTML = /*html*/ `
+          <img src="/public/img/congrats.svg" alt="images of congrats" />
+          <p class="legend">Congrats! You completed the quiz.</p>
+          <p class="score">You answer ${score}/${data.length} correctly.</p>
+  `;
+  btnAgain.innerText = "Play again";
+  btnAgain.className = "btn-again";
+  btnAgain.addEventListener("click", () => {
+    window.location.reload(true);
+  });
+  card.append(btnAgain);
+  $quiz.innerHTML = "";
+  $quiz.append(card);
+}
 
 renderIndicators();
 renderQuestion();
 renderOptions();
+showProgress();
