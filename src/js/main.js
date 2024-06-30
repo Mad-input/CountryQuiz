@@ -8,6 +8,9 @@ const soundError = new Audio("/public/audio/error.mp3");
 const soundSend = new Audio("/public/audio/shuffleandbridge.mp3");
 const IndicatorMap = new Map();
 const OptionsMap = new Map();
+const questionsAnswered = [];
+// limpiar el localStorage antes de jugar
+localStorage.removeItem("questionsAnswered");
 const data = await dataCountry.structureQuestions();
 let currentCount = 0;
 let score = 0;
@@ -23,11 +26,21 @@ const renderIndicators = async () => {
     if (containerIndicator) {
       containerIndicator.append(element);
     }
+    element.addEventListener("click", () => anotherQuestion(i));
     // Guardar elemento el el map para evitar volver a buscar
     IndicatorMap.set(i, element);
   }
 };
 
+// another question
+function anotherQuestion(id) {
+  if (id === currentCount) return;
+  if (id < currentCount) currentCount = id;
+  else currentCount = id;
+  renderQuestion();
+  renderOptions();
+  showProgress();
+}
 /**
  *
  * @param {Number} currentCount
@@ -68,11 +81,16 @@ async function checkAnswer(e) {
   const { target } = e;
   const correctAnswer = data[currentCount].answer;
   const userAnswer = target.innerText;
+  // agregar clase active a la opcion para marcar la selección
   target.classList.add("active");
+
+  saveInStorage();
+
   currentCount++;
 
   if (userAnswer === correctAnswer) {
-    score++;
+    //verificar que no halla respondido la pregunta
+    if (!questionsAnswered.includes(currentCount)) score++;
     soundCorrectAnswer.play();
     inserIcon(target, "/public/img/Check_round_fill.svg");
   } else {
@@ -92,6 +110,17 @@ async function checkAnswer(e) {
     showProgress();
     isSeledted = false;
   }, 2000);
+}
+
+// Guardar cada respuesta en el localstorage y verificar que no este
+function saveInStorage() {
+  if (!questionsAnswered.includes(currentCount)) {
+    questionsAnswered.push(currentCount);
+    localStorage.setItem(
+      "questionsAnswered",
+      JSON.stringify([...questionsAnswered])
+    );
+  }
 }
 
 function moveScrollIndicator() {
