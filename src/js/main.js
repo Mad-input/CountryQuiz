@@ -180,6 +180,7 @@ function gameOver() {
   btnAgain.addEventListener("click", () => {
     window.location.reload(true); // Recargar la página para jugar de nuevo
   });
+  card.append(btnAgain);
   $quiz.innerHTML = "";
   $quiz.append(card);
 }
