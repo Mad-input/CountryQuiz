@@ -1,0 +1,41 @@
+:root {
+  --text-color: #c9cdf7;
+  --hoverAndActive: linear-gradient(#e65895, #bc6be8);
+  --bg_quiz: #393f6e;
+  --bg_second: #343964;
+  --text_2: #e2e4f3;
+  --radius: 1.875rem;
+  --bg-body: url("/public/img/bg.jpg") no-repeat top/cover;
+  font-size: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+body {
+  background: var(--bg-body);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-again {
+  border: none;
+  background: var(--hoverAndActive);
+  color: #fff;
+  padding: 1.25rem 2.5rem;
+  width: 55%;
+  border-radius: 0.625rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: scale 0.3s ease;
+  &:hover {
+    scale: 0.95;
+  }
+}

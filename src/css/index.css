@@ -1,0 +1,32 @@
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: var(--bg_quiz);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  transition: 0.3s ease;
+  h1 {
+    color: var(--text-color);
+  }
+  input {
+    padding: 0.625rem 1.25rem;
+    border-radius: calc(var(--radius) / 3);
+    border: none;
+    margin: 1.25rem 0;
+    font-size: 1.125rem;
+    outline: none;
+  }
+  .btn-again {
+    margin-top: 0;
+    width: 100%;
+    font-size: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 772px) {
+  :root {
+    font-size: 13px;
+  }
+}
