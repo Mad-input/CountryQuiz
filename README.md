@@ -4,11 +4,15 @@
 
 - [x] In each question, users should see 4 options.
 
+- [x] Save each question you answer to avoid duplicating points
+
 - [x] When users select an answer, they should get the correct answer immediately with according indicators in the design.
 
-- [] User can navigate to any questions.
+- [x] User can navigate to any questions.
 
 - [x] When users answer all 10 questions, they should see a congratulations page with the result and choose to play again.
+
+- [] make a list of scores and display them at the end of each game
 
 - [] Deploy the solution and submit Repository URL and Demo URL.
 
