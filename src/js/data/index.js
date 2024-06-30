@@ -1,5 +1,7 @@
 export default class dataCountry {
   static questionsCache = [];
+
+  // Método para obtener información de todos los países
   static async getAllInfo() {
     try {
       let res;
@@ -16,9 +18,9 @@ export default class dataCountry {
   }
 
   /**
-   *
-   * @param {Number} limit limite de de preguntas
-   * @returns {}
+   * Método para estructurar preguntas sobre las capitales de los países
+   * @param {Number} limit - Límite de preguntas
+   * @returns {Array} - Array de preguntas estructuradas
    */
   static async structureQuestions(limit = 10) {
     await this.getAllInfo().then();
@@ -27,13 +29,18 @@ export default class dataCountry {
         () => Math.random() - 0.5
       );
       if (!data) return [];
+
       // Limitar la cantidad de información
       const splitData = data.slice(0, limit);
 
       const randomCapitals = data
-        .slice(0, 30)
+        .slice(0, 40)
         .map(({ capital }) =>
-          capital instanceof Object ? capital[0] : capital
+          capital instanceof Object
+            ? capital[0]
+            : capital == undefined
+            ? "None of the above"
+            : capital
         );
 
       const newData = splitData.map(({ name, capital, flag }, id) => {
@@ -49,7 +56,7 @@ export default class dataCountry {
           capital: newCapital,
           question: `What is the capital of ${newName} ${flag}?`,
           answer: newCapital,
-          options: [...newOptions, newCapital],
+          options: [...newOptions, newCapital].sort(() => Math.random() - 0.5),
         };
       });
       return newData;
