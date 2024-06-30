@@ -132,6 +132,9 @@ body {
         color: #fff;
         cursor: pointer;
         animation: fadeIn 1s ease;
+        .icon-option {
+          position: absolute;
+        }
         &:hover {
           background: var(--hoverAndActive);
         }

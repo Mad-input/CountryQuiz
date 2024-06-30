@@ -37,7 +37,7 @@ export default class dataCountry {
       const randomCapitals = data
         .slice(0, 40)
         .map(({ capital }) =>
-          capital instanceof Array
+          capital instanceof Object
             ? capital[0]
             : capital == undefined
             ? "None of the above"
@@ -47,7 +47,7 @@ export default class dataCountry {
       // Estructurar los datos en un nuevo array de preguntas
       const newData = splitData.map(({ name, capital, flag }, id) => {
         const newName = name.common;
-        const newCapital = capital instanceof Array ? capital[0] : capital; // Capital del país
+        const newCapital = capital instanceof Object ? capital[0] : capital; // Capital del país
         // Crear opciones de respuesta, excluyendo la capital correcta
         const newOptions = structuredClone(randomCapitals)
           .filter((capital) => capital !== newCapital)
