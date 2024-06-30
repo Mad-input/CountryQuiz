@@ -12,9 +12,9 @@
 
 - [x] When users answer all 10 questions, they should see a congratulations page with the result and choose to play again.
 
-- [] make a list of scores and display them at the end of each game
+- [x] make a list of scores and display them at the end of each game
 
-- [] Deploy the solution and submit Repository URL and Demo URL.
+- [x] Deploy the solution and submit Repository URL and Demo URL.
 
 # Clase `dataCountry`
 
