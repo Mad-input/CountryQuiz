@@ -17,6 +17,8 @@ const OptionsMap = new Map();
 
 // Array para almacenar las preguntas respondidas
 const questionsAnswered = [];
+const scoreboard = JSON.parse(localStorage.getItem("scoreboard")) || [];
+const user = localStorage.getItem("user") || "unknown";
 
 // Limpiar el localStorage antes de jugar
 localStorage.removeItem("questionsAnswered");
@@ -81,6 +83,7 @@ const renderOptions = async () => {
     const optionElement = document.createElement("button");
     optionElement.innerHTML = `<span>${capital}</span>`;
     optionElement.className = "option";
+    optionElement.setAttribute("data-capital", capital);
     optionsCotainer.appendChild(optionElement);
     optionElement.addEventListener("click", (e) => checkAnswer(e));
 
@@ -96,7 +99,7 @@ async function checkAnswer(e) {
   isSeledted = true;
   const { target } = e;
   const correctAnswer = data[currentCount].answer;
-  const userAnswer = target.innerText;
+  const userAnswer = target.dataset.capital;
   // Agregar clase active a la opción seleccionada
   target.classList.add("active");
 
@@ -163,10 +166,39 @@ function inserIcon(element, url) {
   element.append(iconCheck);
 }
 
+function showScoreboard(element) {
+  const scoreboardElement = document.createElement("div");
+  const listScore = document.createElement("ul");
+  scoreboardElement.className = "scoreboard";
+  listScore.className = "list-score";
+
+  scoreboard
+    .sort((a, b) => b.currentScore - a.currentScore)
+    .forEach((score, i) => {
+      const liElement = document.createElement("li");
+      const rank = i === 0 ? "st" : i === 1 ? "nd" : i === 2 ? "rd" : "th";
+      liElement.className = "list-item-score";
+      liElement.innerHTML = /*html*/ `
+      <strong class="rank">${i + 1}${rank}.</strong>
+      <strong class="name">${score.username}</strong>
+      <small class="currentScore" >${score.currentScore}</small>
+    `;
+      listScore.append(liElement);
+    });
+  scoreboardElement.append(listScore);
+  element.append(scoreboardElement);
+}
+
+function saveScoreInStorage(username, currentScore) {
+  scoreboard.push({ username, currentScore });
+  localStorage.setItem("scoreboard", JSON.stringify([...scoreboard]));
+}
+
 // Finalizar el juego y mostrar los resultados
 function gameOver() {
   const CongrastsAudio = new Audio("/public/audio/congrasts.mp3");
   CongrastsAudio.play();
+  saveScoreInStorage(user, score);
   const card = document.createElement("article");
   const btnAgain = document.createElement("button");
   card.className = "card";
@@ -178,8 +210,9 @@ function gameOver() {
   btnAgain.innerText = "Play again";
   btnAgain.className = "btn-again";
   btnAgain.addEventListener("click", () => {
-    window.location.reload(true); // Recargar la página para jugar de nuevo
+    window.location.replace("/"); // Recargar la página para jugar de nuevo
   });
+  showScoreboard(card);
   card.append(btnAgain);
   $quiz.innerHTML = "";
   $quiz.append(card);

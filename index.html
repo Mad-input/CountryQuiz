@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Conuntry Quiz</title>
+    <title>Country Quiz</title>
     <meta
       name="description"
       content="World Capitals Trivia is an interactive web application designed to test and improve your knowledge about the capitals of countries around the world. It uses real-time data obtained from a public API to generate unique questions each time you access the application."
@@ -12,23 +12,31 @@
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Miguel" />
     <meta http-equiv="Content-Language" content="es" />
-    <link rel="stylesheet" href="./src/styles.css" />
+    <link rel="shortcut icon" href="/public/img/icon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./src/css/variables.css" />
+    <link rel="stylesheet" href="./src/css/index.css" />
   </head>
   <body>
-    <div class="quiz">
-      <header>
-        <h2 class="quiz-title">Country Quiz</h2>
-        <ul class="indicators"></ul>
-      </header>
-      <div class="question-container">
-        <div class="loader-container">
-          <div class="loader"></div>
-          <span>Cargando...</span>
-        </div>
-      </div>
-      <small class="progress"></small>
-    </div>
+    <form id="form">
+      <h1>Country Quiz</h1>
+      <input
+        type="text"
+        id="inputUser"
+        required
+        placeholder="Enter your name"
+        minlength="3"
+        maxlength="10"
+      />
+      <button
+        class="btn-again"
+        type="submit"
+        role="button"
+        href="./src/game.html"
+      >
+        Play
+      </button>
+    </form>
 
-    <script src="./src/js/main.js" type="module" defer></script>
+    <script src="./src/js/user.js" defer></script>
   </body>
 </html>
