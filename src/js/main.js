@@ -1,5 +1,7 @@
 import dataCountry from "./data/index.js"; // Importar la clase dataCountry para obtener información sobre los países
-
+import Quiz from './Quiz.js'
+const data = await dataCountry.structureQuestions();
+/*
 // Seleccionar elementos del DOM
 const containerIndicator = document.querySelector(".indicators");
 const containerQuestion = document.querySelector(".question-container");
@@ -24,7 +26,6 @@ const user = localStorage.getItem("user") || "unknown";
 localStorage.removeItem("questionsAnswered");
 
 // Obtener datos de las preguntas
-const data = await dataCountry.structureQuestions();
 let currentCount = 0;
 let score = 0;
 let isSeledted = false;
@@ -57,9 +58,8 @@ function anotherQuestion(id) {
   showProgress();
 }
 
-/**
- * Renderizar la pregunta actual
- */
+
+// Renderizar la pregunta actual
 const renderQuestion = async () => {
   IndicatorMap.get(currentCount).classList.add("active");
   const { question } = data[currentCount];
@@ -178,7 +178,7 @@ function showScoreboard(element) {
       const liElement = document.createElement("li");
       const rank = i === 0 ? "st" : i === 1 ? "nd" : i === 2 ? "rd" : "th";
       liElement.className = "list-item-score";
-      liElement.innerHTML = /*html*/ `
+      liElement.innerHTML = `
       <strong class="rank">${i + 1}${rank}.</strong>
       <strong class="name">${score.username}</strong>
       <small class="currentScore" >${score.currentScore}</small>
@@ -202,7 +202,7 @@ function gameOver() {
   const card = document.createElement("article");
   const btnAgain = document.createElement("button");
   card.className = "card";
-  card.innerHTML = /*html*/ `
+  card.innerHTML = `
           <img src="/public/img/congrats.svg" alt="images of congrats" />
           <p class="legend">Congrats! You completed the quiz.</p>
           <p class="score">You answer ${score}/${data.length} correctly.</p>
@@ -223,3 +223,25 @@ renderIndicators();
 renderQuestion();
 renderOptions();
 showProgress();
+*/
+
+const options = {
+  containerIndicator: document.querySelector(".indicators"),
+  containerQuestion: document.querySelector(".question-container"),
+  elementProgess: document.querySelector(".progress"),
+  $quiz: document.querySelector(".quiz"),
+  sounds: {
+    error: new Audio("/public/audio/error.mp3"),
+    send: new Audio("/public/audio/shuffleandbridge.mp3"),
+    correct: new Audio("/public/audio/correct-choice.mp3"),
+    congratulations: new Audio("/public/audio/congrasts.mp3")
+  },
+  icons: {
+    error: "/public/img/Close_round_fill.svg",
+    check: "/public/img/Check_round_fill.svg"
+  }
+}
+
+const QuizCountries = new Quiz(data, options)
+
+QuizCountries.init()
