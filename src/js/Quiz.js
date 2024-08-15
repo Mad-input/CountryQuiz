@@ -75,7 +75,7 @@ class Quiz {
       optionElement.className = "option";
       optionElement.setAttribute("data-capital", capital);
       optionsCotainer.appendChild(optionElement);
-      optionElement.addEventListener("click", (e) => this.checkAnswer(e));
+      optionElement.addEventListener("click", (e) => this.checkAnswer(e), true);
 
       // Guardar la opción en el mapa para su uso posterior
       this.OptionsMap.set(capital, optionElement);
@@ -87,11 +87,12 @@ class Quiz {
   checkAnswer(e) {
     if (this.isSeledted) return; // Evitar múltiples selecciones
     this.isSeledted = true;
-    const { target } = e;
+    const { currentTarget } = e;
     const correctAnswer = this.data[this.currentCount].answer;
-    const userAnswer = target.dataset.capital;
+    const userAnswer = currentTarget.dataset.capital;
+
     // Agregar clase active a la opción seleccionada
-    target.classList.add("active");
+    currentTarget.classList.add("active");
 
     this.saveInStorage(); // Guardar la respuesta en el localStorage
 
@@ -100,12 +101,12 @@ class Quiz {
     if (userAnswer === correctAnswer) {
       if (!this.questionsAnswered.includes(this.currentCount)) this.score++; // Incrementar el puntaje si es correcto
       this.options.sounds.correct.play();
-      this.inserIcon(target, this.options.icons.check);
+      this.inserIcon(currentTarget, this.options.icons.check);
     } else {
       this.options.sounds.error.play();
       // Seleccionar la opción correcta para agregarle el ícono
       const element = this.OptionsMap.get(correctAnswer);
-      this.inserIcon(target, this.options.icons.error);
+      this.inserIcon(currentTarget, this.options.icons.error);
       this.inserIcon(element, this.options.icons.check);
     }
 
@@ -135,7 +136,7 @@ class Quiz {
   // Mover el indicador de desplazamiento
   moveScrollIndicator() {
     if (window.innerWidth < 772 && this.options.containerIndicator) {
-      const { clientHeight } = containerIndicator.querySelector(".indicator");
+      const { clientHeight } = this.options.containerIndicator.querySelector(".indicator");
       this.options.containerIndicator.scrollLeft += clientHeight;
     }
   }
