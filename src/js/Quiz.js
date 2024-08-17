@@ -64,21 +64,21 @@ class Quiz {
 
   // Renderizar las opciones de respuesta
   renderOptions = () => {
-    const finalCapitals = this.data[this.currentCount].options;
+    const finalOptions = this.data[this.currentCount].options;
 
     const optionsCotainer = document.createElement("div");
     optionsCotainer.className = "options-container";
     optionsCotainer.innerHTML = "";
-    finalCapitals.forEach((capital) => {
+    finalOptions.forEach((option) => {
       const optionElement = document.createElement("button");
-      optionElement.innerHTML = `<span>${capital}</span>`;
+      optionElement.innerHTML = `<span>${option}</span>`;
       optionElement.className = "option";
-      optionElement.setAttribute("data-capital", capital);
+      optionElement.setAttribute("data-name", option);
       optionsCotainer.appendChild(optionElement);
       optionElement.addEventListener("click", (e) => this.checkAnswer(e), true);
 
       // Guardar la opción en el mapa para su uso posterior
-      this.OptionsMap.set(capital, optionElement);
+      this.OptionsMap.set(option, optionElement);
     });
     this.options.containerQuestion.append(optionsCotainer);
   };
@@ -89,7 +89,7 @@ class Quiz {
     this.isSeledted = true;
     const { currentTarget } = e;
     const correctAnswer = this.data[this.currentCount].answer;
-    const userAnswer = currentTarget.dataset.capital;
+    const userAnswer = currentTarget.dataset.name;
 
     // Agregar clase active a la opción seleccionada
     currentTarget.classList.add("active");
